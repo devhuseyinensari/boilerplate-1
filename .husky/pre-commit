@@ -1,0 +1,8 @@
+branch=$(git symbolic-ref --short HEAD)
+if [ "$branch" = "main" ] && [ "$ALLOW_MAIN" != "1" ]; then
+  echo "Direct commits to main are blocked. Create a feature branch and open a PR."
+  echo "One-off override (e.g. initial commit): ALLOW_MAIN=1 git commit ..."
+  exit 1
+fi
+
+pnpm exec lint-staged

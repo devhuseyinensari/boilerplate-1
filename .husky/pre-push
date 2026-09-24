@@ -1,0 +1,11 @@
+if [ "$ALLOW_MAIN" != "1" ]; then
+  while read -r local_ref local_sha remote_ref remote_sha; do
+    if [ "$remote_ref" = "refs/heads/main" ]; then
+      echo "Direct push to main is blocked. Open a PR from a feature branch instead."
+      echo "One-off override (e.g. initial push): ALLOW_MAIN=1 git push ..."
+      exit 1
+    fi
+  done
+fi
+
+pnpm typecheck && pnpm lint && pnpm build

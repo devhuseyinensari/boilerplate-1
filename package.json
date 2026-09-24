@@ -1,0 +1,36 @@
+{
+  "name": "fullstack-boilerplate",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "prepare": "husky",
+    "dev:all": "pnpm -r --parallel run dev",
+    "dev:client": "pnpm --filter client dev",
+    "dev:server": "pnpm --filter server dev",
+    "build": "pnpm --filter server build && pnpm --filter client build",
+    "start": "pnpm --filter server start",
+    "lint": "biome lint .",
+    "format": "biome format --write .",
+    "check": "biome check --write .",
+    "typecheck": "pnpm --filter client exec tsc --noEmit && pnpm --filter server exec tsc --noEmit",
+    "db:generate": "pnpm --filter server db:generate",
+    "db:migrate": "pnpm --filter server db:migrate",
+    "db:studio": "pnpm --filter server db:studio"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@commitlint/cli": "^21.2.3",
+    "@commitlint/config-conventional": "^21.2.3",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.5.1",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "pnpm": ">=12.4.2"
+  },
+  "packageManager": "pnpm@12.4.2",
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json}": ["biome check --write --no-errors-on-unmatched"]
+  }
+}
