@@ -8,4 +8,4 @@ if [ "$ALLOW_MAIN" != "1" ]; then
   done
 fi
 
-pnpm typecheck && pnpm lint && pnpm build
+pnpm typecheck && pnpm lint && pnpm build && pnpm build:landing
