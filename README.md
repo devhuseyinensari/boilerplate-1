@@ -15,14 +15,16 @@ pnpm workspaces monorepo. Client (Vite + React + TanStack Router) ve server
 - [Git hook'lari (husky)](#git-hooklari-husky)
 - [Docker / Dokploy](#docker--dokploy)
 - [Yapi](#yapi)
+- [Opsiyonel modulleri kaldirma](#opsiyonel-modulleri-kaldirma)
 - [AI agent kurallari ve skill'ler](#ai-agent-kurallari-ve-skiller)
 
 ## Stack
 
-- **Monorepo**: pnpm workspaces (`apps/client`, `apps/server`, `packages/shared`)
+- **Monorepo**: pnpm workspaces (`apps/client`, `apps/server`, `apps/landing`, `packages/shared`)
 - **Lint/Format**: Biome
 - **Client**: TanStack Router, React Query, Zustand, React Hook Form, Zod, Axios, Tailwind v4, shadcn-tarzi componentler
 - **Server**: Hono, Drizzle ORM + PostgreSQL, better-auth (email/sifre), `@hono/zod-openapi` + Scalar (API docs)
+- **Landing**: Astro (static output) + React islands + Tailwind v4, content collections ile blog — *opsiyonel, bkz. [Opsiyonel modulleri kaldirma](#opsiyonel-modulleri-kaldirma)*
 
 ## Ilk kurulum checklist'i
 
@@ -96,7 +98,7 @@ hazir olur, ayri bir process gerekmez.
 pnpm check      # biome check --write
 pnpm lint
 pnpm format
-pnpm typecheck  # tsc --noEmit, client + server
+pnpm typecheck  # her app kendi typecheck script'ini calistirir (tsc --noEmit / astro check), pnpm -r --parallel ile
 ```
 
 ## Biome kurallari
@@ -111,8 +113,11 @@ Tek `biome.json`, tum workspace'i kapsar. Onemli noktalar:
   log seviyesi oldugu icin serbest).
 - **organizeImports**: acik, import sirasi otomatik duzenlenir.
 - **ignore**: `dist`, `build`, `node_modules`, uretilen `routeTree.gen.ts`,
-  `public`, `apps/server/drizzle` (migration ciktisi) — bunlari elle
-  formatlamaya calisma, biome zaten dokunmuyor.
+  `public`, `apps/server/drizzle` (migration ciktisi), `**/*.astro` (Biome
+  `.astro` template syntax'ini anlamiyor — frontmatter'daki degiskenleri
+  template'te kullanilmamis sanip yanlis "unused variable" hatasi verir;
+  `.astro` dosyalari `astro check`/editor'un Astro eklentisi kapsar) —
+  bunlari elle formatlamaya calisma, biome zaten dokunmuyor.
 
 Bir kurali gerekcesiyle susturmak icin:
 
@@ -163,11 +168,27 @@ middleware'i aktif (HSTS, X-Frame-Options, nosniff vb.).
 
 ```
 apps/
-  client/   # Vite + React + TanStack Router
-  server/   # Hono + Drizzle + better-auth
+  client/    # Vite + React + TanStack Router
+  server/    # Hono + Drizzle + better-auth
+  landing/   # Astro + React + Tailwind, static + blog (opsiyonel)
 packages/
-  shared/   # ortak zod schema'lari (client + server tarafindan import edilir)
+  shared/    # ortak zod schema'lari (client + server tarafindan import edilir)
 ```
+
+## Opsiyonel modulleri kaldirma
+
+`apps/landing` (ve ileride eklenecek `apps/mobile`) bagimsiz workspace
+paketleridir; `client`/`server` onlara import ile baglanmaz. Istemiyorsan:
+
+1. `apps/landing` klasorunu sil.
+2. Kok `package.json`'daki o app'e ozel script satirlarini sil
+   (`dev:landing`, `build:landing`). `dev:all` ve `typecheck` zaten
+   `pnpm -r` ile calisiyor, silinen app'i otomatik atlar — elle dokunma.
+3. `pnpm install` calistir (lockfile'daki kalinti girdiyi temizler).
+
+Baska hicbir dosyada (Dockerfile, docker-compose, biome.json, CI) referans
+yok — `apps/*` glob'u pnpm-workspace.yaml'da zaten silinen klasoru otomatik
+dislar.
 
 ## AI agent kurallari ve skill'ler
 

@@ -3,7 +3,16 @@
   "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
   "files": {
     "ignoreUnknown": true,
-    "ignore": ["dist", "build", "node_modules", "routeTree.gen.ts", "public", "apps/server/drizzle"]
+    "ignore": [
+      "dist",
+      "build",
+      "node_modules",
+      "routeTree.gen.ts",
+      "public",
+      "apps/server/drizzle",
+      "apps/landing/.astro",
+      "**/*.astro"
+    ]
   },
   "formatter": {
     "enabled": true,
