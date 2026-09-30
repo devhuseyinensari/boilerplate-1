@@ -1,6 +1,6 @@
 # Fullstack Boilerplate
 
-pnpm workspaces monorepo: `apps/client` (Vite + React + TanStack Router), `apps/server` (Hono + Drizzle + better-auth), `apps/landing` (Astro + React + Tailwind, static site + blog — optional, deletable), `packages/shared` (zod schemas shared by client/server). Biome for lint/format. See README.md for setup, scripts, and how to remove optional apps.
+pnpm workspaces monorepo: `apps/client` (Vite + React + TanStack Router), `apps/server` (Hono + Drizzle + better-auth), `apps/landing` (Astro + React + Tailwind, static site + blog — optional, deletable), `apps/mobile` (Expo + Expo Router + better-auth, shares server auth session — optional, deletable), `packages/shared` (zod schemas shared by client/server/mobile). Biome for lint/format. See README.md for setup, scripts, and how to remove optional apps.
 
 <!-- caveman-begin -->
 Respond terse like smart caveman. All technical substance stay. Only fluff die.

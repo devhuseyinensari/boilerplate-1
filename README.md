@@ -20,11 +20,12 @@ pnpm workspaces monorepo. Client (Vite + React + TanStack Router) ve server
 
 ## Stack
 
-- **Monorepo**: pnpm workspaces (`apps/client`, `apps/server`, `apps/landing`, `packages/shared`)
+- **Monorepo**: pnpm workspaces (`apps/client`, `apps/server`, `apps/landing`, `apps/mobile`, `packages/shared`)
 - **Lint/Format**: Biome
 - **Client**: TanStack Router, React Query, Zustand, React Hook Form, Zod, Axios, Tailwind v4, shadcn-tarzi componentler
 - **Server**: Hono, Drizzle ORM + PostgreSQL, better-auth (email/sifre), `@hono/zod-openapi` + Scalar (API docs)
 - **Landing**: Astro (static output) + React islands + Tailwind v4, content collections ile blog — *opsiyonel, bkz. [Opsiyonel modulleri kaldirma](#opsiyonel-modulleri-kaldirma)*
+- **Mobile**: Expo (SDK 57) + Expo Router + better-auth (`@better-auth/expo`, server ile ayni oturum) — *opsiyonel, bkz. [Opsiyonel modulleri kaldirma](#opsiyonel-modulleri-kaldirma)*
 
 ## Ilk kurulum checklist'i
 
@@ -171,20 +172,26 @@ apps/
   client/    # Vite + React + TanStack Router
   server/    # Hono + Drizzle + better-auth
   landing/   # Astro + React + Tailwind, static + blog (opsiyonel)
+  mobile/    # Expo + Expo Router + better-auth (opsiyonel)
 packages/
-  shared/    # ortak zod schema'lari (client + server tarafindan import edilir)
+  shared/    # ortak zod schema'lari (client + server + mobile tarafindan import edilir)
 ```
 
 ## Opsiyonel modulleri kaldirma
 
-`apps/landing` (ve ileride eklenecek `apps/mobile`) bagimsiz workspace
-paketleridir; `client`/`server` onlara import ile baglanmaz. Istemiyorsan:
+`apps/landing` ve `apps/mobile` bagimsiz workspace paketleridir;
+`client`/`server` onlara import ile baglanmaz (mobile server'a sadece
+calisma zamaninda HTTP ile baglanir, kod paylasimi yok). Istemiyorsan:
 
-1. `apps/landing` klasorunu sil.
+1. `apps/landing` ve/veya `apps/mobile` klasorunu sil.
 2. Kok `package.json`'daki o app'e ozel script satirlarini sil
-   (`dev:landing`, `build:landing`). `dev:all` ve `typecheck` zaten
-   `pnpm -r` ile calisiyor, silinen app'i otomatik atlar — elle dokunma.
-3. `pnpm install` calistir (lockfile'daki kalinti girdiyi temizler).
+   (`dev:landing`/`build:landing` veya `dev:mobile`). `dev:all` ve
+   `typecheck` zaten `pnpm -r` ile calisiyor, silinen app'i otomatik atlar
+   — elle dokunma.
+3. `apps/mobile` siliniyorsa `apps/server/src/auth.ts`'deki `expo()`
+   plugin'i ve `trustedOrigins`'deki `mobile://`/`exp://` girdilerini de
+   kaldir (server tarafinda kalan tek referans budur).
+4. `pnpm install` calistir (lockfile'daki kalinti girdiyi temizler).
 
 Baska hicbir dosyada (Dockerfile, docker-compose, biome.json, CI) referans
 yok — `apps/*` glob'u pnpm-workspace.yaml'da zaten silinen klasoru otomatik
