@@ -9,6 +9,7 @@
     "dev:client": "pnpm --filter client dev",
     "dev:server": "pnpm --filter server dev",
     "dev:landing": "pnpm --filter landing dev",
+    "dev:mobile": "pnpm --filter mobile dev",
     "build": "pnpm --filter server build && pnpm --filter client build",
     "build:landing": "pnpm --filter landing build",
     "start": "pnpm --filter server start",

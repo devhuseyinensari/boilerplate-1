@@ -11,7 +11,8 @@
       "public",
       "apps/server/drizzle",
       "apps/landing/.astro",
-      "**/*.astro"
+      "**/*.astro",
+      "apps/mobile/.expo"
     ]
   },
   "formatter": {
